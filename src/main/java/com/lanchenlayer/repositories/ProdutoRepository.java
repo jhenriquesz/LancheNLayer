@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoRepository {
-    private ArrayList<Produto> produtos;
-
-    public ProdutoRepository() {
-        this.produtos = new ArrayList<>();
-    }
+    private List<Produto> produtos = new ArrayList<>();
 
     public void adicionar(Produto produto) {
         produtos.add(produto);
@@ -24,7 +20,18 @@ public class ProdutoRepository {
         return produtos.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
     }
 
-    public ArrayList<Produto> buscarTodos() {
-        return new ArrayList<>(produtos);
+    public List<Produto> buscarTodos() {
+        return produtos;
+    }
+
+    public void atualizar(int id, Produto novoProduto) {
+        Produto produtoExistente = buscarPorId(id);
+        if (produtoExistente != null) {
+            produtoExistente.setDescricao(novoProduto.getDescricao());
+            produtoExistente.setValor(novoProduto.getValor());
+            if (novoProduto.getImagem() != null) {
+                produtoExistente.setImagem(novoProduto.getImagem());
+            }
+        }
     }
 }
