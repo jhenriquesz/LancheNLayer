@@ -3,35 +3,34 @@ package com.lanchenlayer.repositories;
 import com.lanchenlayer.entities.Produto;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ProdutoRepository {
-    private List<Produto> produtos = new ArrayList<>();
+public class ProdutoRepository implements ProdutoRepositoryInterface {
+    private Map<Integer, Produto> produtos = new HashMap<>();
 
+    @Override
     public void adicionar(Produto produto) {
-        produtos.add(produto);
+        produtos.put(produto.getId(), produto);
     }
 
+    @Override
     public void remover(int id) {
-        produtos.removeIf(produto -> produto.getId() == id);
+        produtos.remove(id);
     }
 
+    @Override
     public Produto buscarPorId(int id) {
-        return produtos.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+        return produtos.get(id);
     }
 
-    public List<Produto> buscarTodos() {
-        return produtos;
+    @Override
+    public ArrayList<Produto> buscarTodos() {
+        return new ArrayList<>(produtos.values());
     }
 
-    public void atualizar(int id, Produto novoProduto) {
-        Produto produtoExistente = buscarPorId(id);
-        if (produtoExistente != null) {
-            produtoExistente.setDescricao(novoProduto.getDescricao());
-            produtoExistente.setValor(novoProduto.getValor());
-            if (novoProduto.getImagem() != null) {
-                produtoExistente.setImagem(novoProduto.getImagem());
-            }
-        }
+    @Override
+    public void atualizar(Produto produto) {
+        produtos.put(produto.getId(), produto);
     }
 }
